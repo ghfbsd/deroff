@@ -157,6 +157,8 @@ static FILE *infile;
 static int argc;
 static char **argv;
 
+#define __USE(a)	((void)(a))
+
 /*
  *	Macro processing
  *
