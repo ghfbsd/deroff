@@ -104,6 +104,7 @@ __RCSID("$NetBSD: deroff.c,v 1.12 2019/02/03 03:19:29 mrg Exp $");
 #endif /* not DEBUG */
 
 #define SKIP while (C != '\n')
+#define SKIP1 while (C1 != '\n')
 #define SKIP_TO_COM SKIP; SKIP; pc=c; while (C != '.' || pc != '\n' || C > 'Z')pc=c
 
 #define	YES 1
@@ -515,7 +516,7 @@ macro(void)
 
 	if (msflag) {
 		do {
-			SKIP;
+			SKIP1;
 		} while (C!='.' || C!='.' || C=='.');	/* look for  .. */
 		if (c != '\n')
 			SKIP;
