@@ -1627,6 +1627,8 @@ buildtab(const struct mactab **r_back, int *r_size)
  */
 static const struct mactab	troffmactab[] = {
 	M(NONE,		'\\','"',	skip),	/* comment */
+ 	M(NONE,		'n','r',	skip),	/* register assignment */
+ 	M(NONE,		'd','s',	skip),	/* string assignment */
 	M(NOMAC,	'd','e',	domacro),	/* define */
 	M(NOMAC,	'i','g',	domacro),	/* ignore till .. */
 	M(NOMAC,	'a','m',	domacro),	/* append macro */
