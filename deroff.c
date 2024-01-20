@@ -383,8 +383,8 @@ skeqn(void)
 		}
 	}
 	if (msflag)
-		return c == 'x';
-	return c == ' ';
+		return (c = 'x');
+	return (c = ' ');
 }
 
 static FILE *
@@ -1044,25 +1044,30 @@ noblock(char a1, char a2)
 	int lct;
 
 	lct = 0;
-	eqnf = 1;
+	eqnf = 0;
 	SKIP;
 	for (;;) {
-		while (C != '.')
-			if (c == '\n')
-				continue;
-			else
-				SKIP;
-		if ((c1 = C) == '\n')
+		while (C != '.') {
+			putchar(c);
+			if (c == '\n') continue;
+		}
+		if ((c1 = C) == '\n') {
+			putchar('.');
+			putchar('\n');
 			continue;
-		if ((c2 = C) == '\n')
+		}
+		if ((c2 = C) == '\n') {
+			putchar(c1);
+			putchar('\n');
 			continue;
+		}
 		if (c1 == a1 && c2 == a2) {
 			SKIP;
 			if (lct != 0) {
 				lct--;
 				continue;
 			}
-			if (eqnf)
+			if (eqnf)   /* Not sure why this needed. */
 				putchar('.');
 			putchar('\n');
 			return;
@@ -1077,7 +1082,7 @@ noblock(char a1, char a2)
 			if ((mac == ME && a1 == ')')
 			    || (mac != ME && a1 == 'D')) {
 				eqn();
-				eqnf=0;
+				eqnf=1;
 			}
 		}
 		/*
@@ -1091,7 +1096,7 @@ noblock(char a1, char a2)
 				return;
 			}
 		} else {
-			SKIP;
+			putchar(c1); putchar(c2); continue;
 		}
 	}
 }
