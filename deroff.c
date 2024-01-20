@@ -998,6 +998,10 @@ meputmac(char *cp, int constant)
 				putchar(*cp);
 			last = np[-1];
 			found++;
+		} else if (found && (np - cp) > constant) {
+			for (; cp < np; cp++)
+				putchar(*cp);
+			last = np[-1];
 		} else if (found && (np - cp == 1) &&
 		    chars[(unsigned char)*cp] == PUNCT) {
 			putchar(*cp);
