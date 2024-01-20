@@ -1634,6 +1634,10 @@ static const struct mactab	troffmactab[] = {
 	M(NONE,		'\\','"',	skip),	/* comment */
  	M(NONE,		'n','r',	skip),	/* register assignment */
  	M(NONE,		'd','s',	skip),	/* string assignment */
+ 	M(NONE,		'i','f',	skip),	/* if stmt */
+ 	M(NONE,		'i','e',	skip),	/* if-else stmt */
+ 	M(NONE,		'e','l',	skip),	/* else stmt */
+ 	M(NONE,		's','p',	skip),	/* vertical spacing */
 	M(NOMAC,	'd','e',	domacro),	/* define */
 	M(NOMAC,	'i','g',	domacro),	/* ignore till .. */
 	M(NOMAC,	'a','m',	domacro),	/* append macro */
