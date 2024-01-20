@@ -975,7 +975,7 @@ meputmac(char *cp, int constant)
 #ifdef FULLDEBUG
 		{
 			char	*p;
-			printf("[%d,%d: ", argno, np - cp);
+			printf("[%d,%ld: ", argno, np - cp);
 			for (p = cp; p < np; p++) {
 				putchar(*p);
 			}
