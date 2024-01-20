@@ -576,6 +576,10 @@ eqn(void)
 						putchar('\n');
 					}
 				}
+#ifdef FULLDEBUG
+			        printf("EQ/EN delim `%c',`%c'\n",
+				       ldelim,rdelim);
+#endif /* FULLDEBUG */
 				return;
 			}
 		} else if (c == 'd') {
