@@ -92,7 +92,7 @@ __RCSID("$NetBSD: deroff.c,v 1.12 2019/02/03 03:19:29 mrg Exp $");
  *	Modified by Robert Henry to process -me and -man macros.
  */
 
-#define Cget ( (c=getc(infile)) == EOF ? eof() : ((c==ldelim)&&(filesp==files) ? skeqn() : c) )
+#define Cget ( (c=getc(infile)) == EOF ? eof() : ((c==ldelim) ? skeqn() : c) )
 #define C1get ( (c=getc(infile)) == EOF ? eof() :  c)
 
 #ifdef DEBUG
