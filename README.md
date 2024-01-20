@@ -29,8 +29,8 @@ args that follow text are probably additional text no matter if they aren't
 alphabetic (numbers or punctuation).
 
 * Process in-line equations even in .so inclusions.  This seems reasonable
-since eqn usually is piped from soelim, so in-line equations get processed
-there by troff.
+since eqn input usually is piped from soelim, so in-line equations should
+get processed there by troff too.
 
 * Expanded the list of troff requests to ignore
     
@@ -45,4 +45,9 @@ there by troff.
     - did not output text after in-line equation properly
     - did not handle in-line equation at end of line-ending sentence
 
-* Fix mistaken parsing of \\$n in macro definition as in-line equation
+  deroff handles These omissions properly now.
+
+* Fix mistaken parsing of \\\\$n in macro definition as in-line equation
+
+* Print out what is in blocks of text in the various macro packages
+(-me, -ms, etc.) by default.  Previously, these were, oddly, left out.
