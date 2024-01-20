@@ -12,15 +12,15 @@ decades old.
 
 ### Notes
 
-* The Makefile is rewritten.
+* Rewrote the Makefile.
 
-* The man page was modified to reflect changed behavior.
+* Modified the man page to reflect changed behavior.
 
 ### Bug fixes
 
-* The .ig request is handled properly.
+* Handles the .ig request properly.
 
-* Ignore troff requests in block text.  Request processing should be
+* Ignores troff requests in block text.  Request processing should be
 incorporated into the general request handling framework, but the present
 code lacks generality.
 
@@ -32,7 +32,7 @@ alphabetic (numbers or punctuation).
 since eqn input usually is piped from soelim, so in-line equations should
 get processed there by troff too.
 
-* Expanded the list of troff requests to ignore
+* Expanded the list of troff requests ignored by deroff.
     
     - if, ie, el (conditional)
     - sp (vertical space)
@@ -45,9 +45,9 @@ get processed there by troff too.
     - did not output text after in-line equation properly
     - did not handle in-line equation at end of line-ending sentence
 
-  deroff handles These omissions properly now.
+  deroff handles these omissions properly now.
 
-* Fix mistaken parsing of \\\\$n in macro definition as in-line equation
+* Fix mistaken parsing of \\\\$n in macro definition as in-line equation.
 
 * Print out what is in blocks of text in the various macro packages
 (-me, -ms, etc.) by default.  Previously, these were, oddly, left out.
