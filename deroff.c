@@ -1050,23 +1050,20 @@ noblock(char a1, char a2)
 	int c1,c2;
 	int eqnf;
 	int lct;
+	int i;
 
 	lct = 0;
 	eqnf = 0;
 	SKIP;
-	for (;;) {
-		while (C != '.') {
-			putchar(c);
-			if (c == '\n') continue;
-		}
+	for (i=0;;i=0) {
+		while (C != '.')
+			i++, putchar(c);
 		if ((c1 = C) == '\n') {
-			putchar('.');
-			putchar('\n');
+			putchar('.'); putchar('\n');
 			continue;
 		}
 		if ((c2 = C) == '\n') {
-			putchar(c1);
-			putchar('\n');
+			putchar('.'); putchar(c1); putchar('\n');
 			continue;
 		}
 		if (c1 == a1 && c2 == a2) {
@@ -1104,7 +1101,14 @@ noblock(char a1, char a2)
 				return;
 			}
 		} else {
-			putchar('.'); putchar(c1); putchar(c2);
+			/* Must be a troff request.  Would be better to filter
+			 * it with comline, but comline lacks a c12 parameter.
+			 * Try simply ignoring the request.
+			 */
+			if (i) {
+				putchar('.'); putchar(c1); putchar(c2);
+			} else
+				SKIP1;
 		}
 	}
 }
