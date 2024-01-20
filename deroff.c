@@ -1096,7 +1096,7 @@ noblock(char a1, char a2)
 				return;
 			}
 		} else {
-			putchar(c1); putchar(c2); continue;
+			putchar('.'); putchar(c1); putchar(c2);
 		}
 	}
 }
