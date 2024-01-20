@@ -232,6 +232,7 @@ static int	 mesnblock(pacmac);
 static int	 mssnblock(pacmac);
 static int	 nf(pacmac);
 static int	 ce(pacmac);
+static int	 ig(pacmac);
 static int	 meip(pacmac);
 static int	 mepp(pacmac);
 static int	 mesh(pacmac);
@@ -240,6 +241,7 @@ static int	 manfont(pacmac);
 static int	 manpp(pacmac);
 static int	 macsort(const void *, const void *);
 static int	 sizetab(const struct mactab *);
+static int	 ignore(int);
 static void	 getfname(void);
 static void	 textline(char *, int);
 static void	 work(void) __dead;
@@ -256,7 +258,7 @@ static void	 msputmac(char *, int);
 static void	 msputwords(int);
 static void	 meputmac(char *, int);
 static void	 meputwords(int);
-static void	 noblock(char, char);
+static void	 noblock(char, char, int (int));
 static void	 defcomline(pacmac);
 static void	 comline(void);
 static void	 buildtab(const struct mactab **, int *);
@@ -832,6 +834,12 @@ _C(void)
 }
 #endif /* DEBUG */
 
+static int
+ignore(int c)
+{
+		return c;
+}
+
 /*
  *	Put out a macro line, using ms and mm conventions.
  */
@@ -1045,7 +1053,7 @@ meputwords(int macline)
  *		([lqbzcdf]
  */
 static void
-noblock(char a1, char a2)
+noblock(char a1, char a2, int (out)(int))
 {
 	int c1,c2;
 	int eqnf;
@@ -1057,24 +1065,24 @@ noblock(char a1, char a2)
 	SKIP;
 	for (i=0;;i=0) {
 		while (C != '.')
-			i++, putchar(c);
+			i++, out(c);
 		if ((c1 = C) == '\n') {
-			putchar('.'); putchar('\n');
+			out('.'); out('\n');
 			continue;
 		}
 		if ((c2 = C) == '\n') {
-			putchar('.'); putchar(c1); putchar('\n');
+			out('.'); out(c1); out('\n');
 			continue;
 		}
-		if (c1 == a1 && c2 == a2) {
+		if (c1 == a1 && (c2 == a2 || a2 == ' ')) {
 			SKIP;
 			if (lct != 0) {
 				lct--;
 				continue;
 			}
 			if (eqnf)   /* Not sure why this needed. */
-				putchar('.');
-			putchar('\n');
+				out('.');
+			out('\n');
 			return;
 		} else if (a1 == 'L' && c2 == 'L') {
 			lct++;
@@ -1106,7 +1114,7 @@ noblock(char a1, char a2)
 			 * Try simply ignoring the request.
 			 */
 			if (i) {
-				putchar('.'); putchar(c1); putchar(c2);
+				out('.'); out(c1); out(c2);
 			} else
 				SKIP1;
 		}
@@ -1146,7 +1154,7 @@ PS(pacmac unused)
 	if (!msflag)
 		inpic();
 	else
-		noblock('P', 'E');
+		noblock('P', 'E', putchar);
 	return 0;
 }
 
@@ -1310,7 +1318,7 @@ mesnblock(pacmac c12)
 	int c1, c2;
 
 	frommac(c12, c1, c2);
-	noblock(')', c2);
+	noblock(')', c2, putchar);
 	return 0;
 }
 
@@ -1320,7 +1328,7 @@ mssnblock(pacmac c12)
 	int c1, c2;
 
 	frommac(c12, c1, c2);
-	noblock(c1, 'E');
+	noblock(c1, 'E', putchar);
 	return 0;
 }
 
@@ -1329,7 +1337,7 @@ static int
 nf(pacmac unused)
 {
 
-	noblock('f', 'i');
+	noblock('f', 'i', putchar);
 	return 0;
 }
 
@@ -1339,6 +1347,24 @@ ce(pacmac unused)
 {
 
 	sce();
+	return 0;
+}
+
+static int
+/*ARGUSED*/
+ig(pacmac unused)
+{
+	int c1, c2;
+
+	do {
+		c1 = C;
+	} while (c1 == ' ' && c1 != '\n');
+	if (c1 == '\n') {
+		c1 = '.'; c2 = ' ';
+	} else
+		c2 = C;
+	SKIP1;
+	noblock(c1, c2, ignore);
 	return 0;
 }
 
@@ -1417,7 +1443,7 @@ defcomline(pacmac c12)
 	frommac(c12, c1, c2);
 	if (msflag && mac == MM && c2 == 'L') {
 		if (disp || c1 == 'R') {
-			noblock('L', 'E');
+			noblock('L', 'E', putchar);
 		} else {
 			SKIP;
 			putchar('.');
@@ -1651,8 +1677,8 @@ static const struct mactab	troffmactab[] = {
  	M(NONE,		'e','l',	skip),	/* else stmt */
  	M(NONE,		's','p',	skip),	/* vertical spacing */
 	M(NOMAC,	'd','e',	domacro),	/* define */
-	M(NOMAC,	'i','g',	domacro),	/* ignore till .. */
 	M(NOMAC,	'a','m',	domacro),	/* append macro */
+	M(NONE,		'i','g',	ig),	/* ignore till .. */
 	M(NBLK,		'n','f',	nf),	/* filled */
 	M(NBLK,		'c','e',	ce),	/* centered */
 
